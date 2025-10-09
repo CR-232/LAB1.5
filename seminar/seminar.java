@@ -8,7 +8,7 @@ public class seminar {
     public static void main(String[] args) {
         int tab[] = new int[50];
 
-
+int a;
         System.out.println("Lista de numere:");
         for (int i = 0; i < 50; i++) {
             tab[i] = (int)(Math.random() * 100-1)+1;
