@@ -15,7 +15,8 @@ public class seminar {
 
         Th1 fir1 = new Th1(mas);
         Th2 fir2 = new Th2(mas);
-
+        Th3 fir3 = new Th3(mas); // condiția 1 - început, alt stil de cod
+        Th4 fir4 = new Th4(mas); // condiția 2 - sfârșit, alt stil de cod
 
         try {
             fir1.start();
@@ -24,6 +25,11 @@ public class seminar {
             fir2.start();
             fir2.join();
 
+            fir3.start();
+            fir3.join();
+
+            fir4.start();
+            fir4.join();
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -66,5 +72,42 @@ class Th2 extends Thread {
         //test
     }
 }
+// Condiția 1: De la început, dar implementată diferit (folosind WHILE)
+class Th3 extends Thread {
+    int[] mas;
+    public Th3(int[] mas) { this.mas = mas; }
 
+    public void run() {
+        System.out.println(getName() + " -> Condiția 1: început, poziții pare (folosind WHILE)");
+        int i = 0;
+        int suma = 0;
+        while (i < mas.length - 2) {
+            int produs = mas[i] * mas[i + 2];
+            System.out.printf("[%d,%d] %d * %d = %d%n", i, i + 2, mas[i], mas[i + 2], produs);
+            suma += produs;
+            i += 2;
+        }
+        System.out.println("→ Suma totală (de la început, WHILE) = " + suma + "\n");
+    }
+}
+
+// ======================== FIR 4 ============================
+// Condiția 2: De la sfârșit, dar implementată diferit (folosind for invers și variabilă temporară)
+class Th4 extends Thread {
+    int[] mas;
+    public Th4(int[] mas) { this.mas = mas; }
+
+    public void run() {
+        System.out.println(getName() + " -> Condiția 2: sfârșit, poziții pare (alt stil de cod - for invers)");
+        int suma = 0;
+        for (int i = mas.length; i >= 4; i -= 2) {
+            int a = mas[i - 2];
+            int b = mas[i - 4];
+            int produs = a * b;
+            System.out.printf("[%d,%d] %d * %d =%d%n", i - 2, i - 4, a, b, produs);
+            suma += produs;
+        }
+        System.out.println("→ Suma totală (de la sfârșit, alt stil) = " + suma + "\n");
+    }
+}
 
