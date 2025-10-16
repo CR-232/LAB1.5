@@ -10,7 +10,7 @@ public class seminar {
             mas[i] = (int)(Math.random() * 100) + 1;
             System.out.print(mas[i] + " ");
         }
-        System.out.println("\n--------------------------------\n");
+        System.out.println("\n----------------------------------\n");
 
 
         Th1 fir1 = new Th1(mas);
