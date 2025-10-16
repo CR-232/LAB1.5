@@ -15,8 +15,8 @@ public class seminar {
 
         Th1 fir1 = new Th1(mas);
         Th2 fir2 = new Th2(mas);
-        Th3 fir3 = new Th3(mas); // condiția 1 - început, alt stil de cod
-        Th4 fir4 = new Th4(mas); // condiția 2 - sfârșit, alt stil de cod
+        Th3 fir3 = new Th3(mas);
+        Th4 fir4 = new Th4(mas);
 
         try {
             fir1.start();
@@ -72,7 +72,7 @@ class Th2 extends Thread {
         //test
     }
 }
-// Condiția 1: De la început, dar implementată diferit (folosind WHILE)
+
 class Th3 extends Thread {
     int[] mas;
     public Th3(int[] mas) { this.mas = mas; }
@@ -91,8 +91,7 @@ class Th3 extends Thread {
     }
 }
 
-// ======================== FIR 4 ============================
-// Condiția 2: De la sfârșit, dar implementată diferit (folosind for invers și variabilă temporară)
+
 class Th4 extends Thread {
     int[] mas;
     public Th4(int[] mas) { this.mas = mas; }
