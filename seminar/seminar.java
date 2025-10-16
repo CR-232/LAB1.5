@@ -1,4 +1,6 @@
-public class Main {
+package seminar;
+
+public class seminar {
     public static void main(String[] args) {
         int[] mas = new int[100];
 
