@@ -35,8 +35,18 @@ public class seminar {
             e.printStackTrace();
         }
 
+        String studenti = "RV și VC grupa CR-232";
 
-        System.out.println("\nLucrarea de laborator realizată de: RV și VC.");
+        for (int i = 0; i < studenti.length(); i++) {
+            System.out.print(studenti.charAt(i));
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println();
+
     }
 }
 
