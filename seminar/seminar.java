@@ -91,7 +91,7 @@ class Th3 extends Thread {
     }
 }
 
-// ======================== FIR 4 ================================
+
 
 class Th4 extends Thread {
     int[] mas;
