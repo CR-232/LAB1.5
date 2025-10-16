@@ -10,7 +10,7 @@ public class seminar {
             mas[i] = (int)(Math.random() * 100) + 1;
             System.out.print(mas[i] + " ");
         }
-        System.out.println("\n--------------------------------\n");
+        System.out.println("\n-------------------------------------\n");
 
 
         Th1 fir1 = new Th1(mas);
@@ -36,18 +36,7 @@ public class seminar {
         }
 
 
-
-        String studenti = "RV și VC grupa CR-232";
-
-        for (int i = 0; i < studenti.length(); i++) {
-            System.out.print(studenti.charAt(i));
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println();
+        System.out.println("\nLucrarea de laborator realizată de: RV și VC.");
     }
 }
 
@@ -102,6 +91,7 @@ class Th3 extends Thread {
     }
 }
 
+/// --------------------------------------66666666//
 
 class Th4 extends Thread {
     int[] mas;
