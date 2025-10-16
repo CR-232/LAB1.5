@@ -90,7 +90,7 @@ class Th3 extends Thread {
         System.out.println("→ Suma totală (de la început, WHILE) = " + suma + "\n");
     }
 }
-
+/// --------------------------------------66666666//
 /// --------------------------------------66666666//
 
 class Th4 extends Thread {
