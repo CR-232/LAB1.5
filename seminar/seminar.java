@@ -63,6 +63,7 @@ class Th2 extends Thread {
             suma += produs;
         }
         System.out.println("→ Suma totală (de la sfârșit) = " + suma + "\n");
+        //test
     }
 }
 
