@@ -7,7 +7,7 @@ public class seminar {
 
         System.out.println("Tabloul de numere generate aleatoriu:");
         for (int i = 0; i < mas.length; i++) {
-            mas[i] = (int)(Math.random() * 100) + 1;
+            mas[i] = (int)(Math.random() * 100-1) + 1;
             System.out.print(mas[i] + " ");
         }
         System.out.println("\n-------------------------------------\n");
@@ -90,8 +90,7 @@ class Th3 extends Thread {
         System.out.println("→ Suma totală (de la început, WHILE) = " + suma + "\n");
     }
 }
-/// --------------------------------------66666666//
-/// --------------------------------------66666666//
+
 
 class Th4 extends Thread {
     int[] mas;
