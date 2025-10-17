@@ -101,7 +101,7 @@ class Th3 extends Thread {
     }
 }
 
-
+/// //-------
 class Th4 extends Thread {
     int[] mas;
     public Th4(int[] mas) { this.mas = mas; }
