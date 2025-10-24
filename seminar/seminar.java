@@ -12,7 +12,7 @@ public class seminar {
         System.out.println("\n-------------------------------------\n");
         Thread fir1 = new Thread(new Th1(mas), "Fir-1");
         Thread fir2 = new Thread(new Th2(mas), "Fir-2");
-
+//
 
 
         try {
