@@ -6,7 +6,7 @@ public class seminar {
 
         System.out.println("Tabloul de numere generate aleatoriu:");
         for (int i = 0; i < mas.length; i++) {
-            mas[i] = (int)(Math.random() * 100 - 1) + 1;
+            mas[i] = (int)(Math.random() * 100 ) + 1;
             System.out.print(mas[i] + " ");
         }
         System.out.println("\n-------------------------------------\n");
