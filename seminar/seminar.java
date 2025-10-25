@@ -57,7 +57,7 @@ class Th1 implements Runnable {
 
 
     public void run() {
-        System.out.println(Thread.currentThread().getName() + " -> Condiția 1: început, poziții pare (metodă clasică)");
+        System.out.println(Thread.currentThread().getName() + " -> Condiția 1: început, poziții pare ");
         int suma = 0;
         for (int i = 0; i < mas.length - 2; i += 2) {
             int produs = mas[i] * mas[i + 2];
@@ -75,7 +75,7 @@ class Th2 implements Runnable {
 
 
     public void run() {
-        System.out.println(Thread.currentThread().getName() + " -> Condiția 2: sfârșit, poziții pare (metodă clasică)");
+        System.out.println(Thread.currentThread().getName() + " -> Condiția 2: sfârșit, poziții pare ");
         int suma = 0;
         for (int i = mas.length - 2; i >= 2; i -= 2) {
             int produs = mas[i] * mas[i - 2];
