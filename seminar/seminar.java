@@ -114,6 +114,11 @@ class Th3 implements Runnable {
                     i, i + 2, mas[i], mas[i + 2], produs);
             suma += produs;
             i += 2;
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         System.out.println("────────────────────────────────────────────");
         System.out.println("firul nr3"+"★ Rezultatul final (începând de la început): " + suma + "\n");
@@ -138,10 +143,16 @@ class Th4 implements Runnable {
             int produs = mas[i] * mas[i - 2];
             System.out.printf("firul nr4"+"│ %2d │ %2d │ %5d │ %5d │ %6d │%n", i, i - 2, mas[i], mas[i - 2], produs);
             suma += produs;
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         System.out.println("└────┴────┴───────┴───────┴────────┘");
         System.out.println("firul nr 4"+"→ Suma totală (de la sfârșit, tabel) = " + suma + "\n");
+
     }
 }
 
