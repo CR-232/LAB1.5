@@ -110,8 +110,8 @@ class Th3 implements Runnable {
         int suma = 0;
         while (i < mas.length - 2) {
             int produs = mas[i] * mas[i + 2];
-            System.out.printf("firul nr3"+"   ► Indici: (%02d , %02d)  |  Valori: (%3d , %3d)  |  Produs = %5d%n",
-                    i, i + 2, mas[i], mas[i + 2], produs);
+            System.out.println("firul nr3"+"[" + i + "," + (i + 2) + "] " + mas[i] + " * " + mas[i + 2] + " = " + produs);
+
             suma += produs;
             i += 2;
             try {
@@ -135,13 +135,11 @@ class Th4 implements Runnable {
         System.out.println(Thread.currentThread().getName() + " -> Condiția 2: sfârșit, poziții pare ");
         int suma = 0;
 
-        System.out.println("┌────┬────┬───────┬───────┬────────┐");
-        System.out.println("│ i1 │ i2 │ val1  │ val2  │ produs │");
-        System.out.println("├────┼────┼───────┼───────┼────────┤");
+
 
         for (int i = mas.length - 2; i >= 2; i -= 2) {
             int produs = mas[i] * mas[i - 2];
-            System.out.printf("firul nr4"+"│ %2d │ %2d │ %5d │ %5d │ %6d │%n", i, i - 2, mas[i], mas[i - 2], produs);
+            System.out.println("firul nr4"+"[" + i + "," + (i - 2) + "] " + mas[i] + " * " + mas[i - 2] + " = " + produs);
             suma += produs;
             try {
                 Thread.sleep(100);
@@ -150,7 +148,7 @@ class Th4 implements Runnable {
             }
         }
 
-        System.out.println("└────┴────┴───────┴───────┴────────┘");
+
         System.out.println("firul nr 4"+"→ Suma totală (de la sfârșit, tabel) = " + suma + "\n");
 
     }
