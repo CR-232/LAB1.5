@@ -15,18 +15,23 @@ public class seminar {
         Thread fir3 = new Thread(new Th3(mas), "Fir-3");
         Thread fir4 = new Thread(new Th4(mas), "Fir-4");
 
-        try {
-            fir1.start();
-            fir1.join();
+       try {
+           fir1.start();
 
-            fir2.start();
-            fir2.join();
 
-            fir3.start();
-            fir3.join();
+           fir2.start();
 
-            fir4.start();
-            fir4.join();
+
+           fir3.start();
+
+
+           fir4.start();
+
+
+           fir4.join();
+       }catch (InterruptedException e){
+
+       }
 
 
 
@@ -34,10 +39,9 @@ public class seminar {
 
 
 /// ///////------/////
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        String studenti = "RV și VC grupa CR-232";
+       
+
+        String studenti = "Rusanovschi Vladimir și Veceslav Covalciuc grupa Cr232 Programarea concurentă și distribuită ";
         for (int i = 0; i < studenti.length(); i++) {
             System.out.print(studenti.charAt(i));
             try {
@@ -61,10 +65,15 @@ class Th1 implements Runnable {
         int suma = 0;
         for (int i = 0; i < mas.length - 2; i += 2) {
             int produs = mas[i] * mas[i + 2];
-            System.out.println("[" + i + "," + (i + 2) + "] " + mas[i] + " * " + mas[i + 2] + " = " + produs);
+            System.out.println("firul nr1"+"[" + i + "," + (i + 2) + "] " + mas[i] + " * " + mas[i + 2] + " = " + produs);
             suma += produs;
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        System.out.println("→ Suma totală (de la început) = " + suma + "\n");
+        System.out.println("firul nr1"+"→ Suma totală (de la început) = " + suma + "\n");
     }
 }
 
@@ -79,10 +88,15 @@ class Th2 implements Runnable {
         int suma = 0;
         for (int i = mas.length - 2; i >= 2; i -= 2) {
             int produs = mas[i] * mas[i - 2];
-            System.out.println("[" + i + "," + (i - 2) + "] " + mas[i] + " * " + mas[i - 2] + " = " + produs);
+            System.out.println("firul nr2"+"[" + i + "," + (i - 2) + "] " + mas[i] + " * " + mas[i - 2] + " = " + produs);
             suma += produs;
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        System.out.println("→ Suma totală (de la sfârșit) = " + suma + "\n");
+        System.out.println( "  firul nr2"+"→ Suma totală (de la sfârșit) = " + suma + "\n");
     }
 }
 
@@ -98,13 +112,13 @@ class Th3 implements Runnable {
         int suma = 0;
         while (i < mas.length - 2) {
             int produs = mas[i] * mas[i + 2];
-            System.out.printf("   ► Indici: (%02d , %02d)  |  Valori: (%3d , %3d)  |  Produs = %5d%n",
+            System.out.printf("firul nr3"+"   ► Indici: (%02d , %02d)  |  Valori: (%3d , %3d)  |  Produs = %5d%n",
                     i, i + 2, mas[i], mas[i + 2], produs);
             suma += produs;
             i += 2;
         }
         System.out.println("────────────────────────────────────────────");
-        System.out.println("★ Rezultatul final (începând de la început): " + suma + "\n");
+        System.out.println("firul nr3"+"★ Rezultatul final (începând de la început): " + suma + "\n");
     }
 }
 
@@ -124,12 +138,12 @@ class Th4 implements Runnable {
 
         for (int i = mas.length - 2; i >= 2; i -= 2) {
             int produs = mas[i] * mas[i - 2];
-            System.out.printf("│ %2d │ %2d │ %5d │ %5d │ %6d │%n", i, i - 2, mas[i], mas[i - 2], produs);
+            System.out.printf("firul nr4"+"│ %2d │ %2d │ %5d │ %5d │ %6d │%n", i, i - 2, mas[i], mas[i - 2], produs);
             suma += produs;
         }
 
         System.out.println("└────┴────┴───────┴───────┴────────┘");
-        System.out.println("→ Suma totală (de la sfârșit, tabel) = " + suma + "\n");
+        System.out.println("firul nr 4"+"→ Suma totală (de la sfârșit, tabel) = " + suma + "\n");
     }
 }
 
