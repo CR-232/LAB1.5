@@ -14,24 +14,22 @@ public class seminar {
         Thread fir2 = new Thread(new Th2(mas), "Fir-2");
         Thread fir3 = new Thread(new Th3(mas), "Fir-3");
         Thread fir4 = new Thread(new Th4(mas), "Fir-4");
-
-       try {
-           fir1.start();
-
-
-           fir2.start();
-
-
-           fir3.start();
+        try {
+            fir1.start();
+            fir2.start();
+            fir3.start();
+            fir4.start();
 
 
-           fir4.start();
+            fir1.join();
+            fir2.join();
+            fir3.join();
+            fir4.join();
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-           fir4.join();
-       }catch (InterruptedException e){
-
-       }
 
 
 
