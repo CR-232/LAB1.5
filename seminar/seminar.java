@@ -93,7 +93,7 @@ class Th3 implements Runnable {
 
 
     public void run() {
-        System.out.println(Thread.currentThread().getName() + " -> Condiția 1: început, poziții pare (stil alternativ de afișare)");
+        System.out.println(Thread.currentThread().getName() + " -> Condiția 1: început, poziții pare ");
         int i = 0;
         int suma = 0;
         while (i < mas.length - 2) {
@@ -115,7 +115,7 @@ class Th4 implements Runnable {
 
 
     public void run() {
-        System.out.println(Thread.currentThread().getName() + " -> Condiția 2: sfârșit, poziții pare (afișare tip tabel compact)");
+        System.out.println(Thread.currentThread().getName() + " -> Condiția 2: sfârșit, poziții pare ");
         int suma = 0;
 
         System.out.println("┌────┬────┬───────┬───────┬────────┐");
