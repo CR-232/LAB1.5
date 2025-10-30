@@ -1,156 +1,71 @@
 package seminar;
 
-public class seminar {
+class seminar {
     public static void main(String[] args) {
-        int[] mas = new int[100];
 
-        System.out.println("Tabloul de numere generate aleatoriu:");
-        for (int i = 0; i < mas.length; i++) {
-            mas[i] = (int)(Math.random() * 100 ) + 1;
-            System.out.print(mas[i] + " ");
-        }
-        System.out.println("\n-------------------------------------\n");
-        Thread fir1 = new Thread(new Th1(mas), "Fir-1");
-        Thread fir2 = new Thread(new Th2(mas), "Fir-2");
-        Thread fir3 = new Thread(new Th3(mas), "Fir-3");
-        Thread fir4 = new Thread(new Th4(mas), "Fir-4");
+        // Grupul principal (implicit) – "main"
+        ThreadGroup mainGroup = Thread.currentThread().getThreadGroup();
+
+        // 🔸 Creăm subgrupurile G1 și G2
+        ThreadGroup G1 = new ThreadGroup(mainGroup, "G1");
+        ThreadGroup G2 = new ThreadGroup(mainGroup, "G2");
+
+        // 🔸 G3 este subgrup în interiorul lui G1
+        ThreadGroup G3 = new ThreadGroup(G1, "G3");
+
+        // 🔹 Grupul G3 conține: Tha(3), Thb(3), Thc(3), Thd(3)
+        Thread Tha = new Fir("Tha", G3, 3);
+        Thread Thb = new Fir("Thb", G3, 3);
+        Thread Thc = new Fir("Thc", G3, 3);
+        Thread Thd = new Fir("Thd", G3, 3);
+
+        // 🔹 Grupul G2 conține: Th1(4), Th2(5), Th3(5)
+        Thread Th1_G2 = new Fir("Th1", G2, 4);
+        Thread Th2_G2 = new Fir("Th2", G2, 5);
+        Thread Th3_G2 = new Fir("Th3", G2, 5);
+
+        // 🔹 Grupul principal (Main) conține: Th1(7), Th2(7), ThA(3)
+        Thread Th1_Main = new Fir("Th1", mainGroup, 7);
+        Thread Th2_Main = new Fir("Th2", mainGroup, 7);
+        Thread ThA_Main = new Fir("ThA", mainGroup, 3);
+
+        // 🔸 Pornim toate firele (ordinea nu contează, dar pentru claritate le pornim grupat)
+        Tha.start();
+        Thb.start();
+        Thc.start();
+        Thd.start();
+
+        Th1_G2.start();
+        Th2_G2.start();
+        Th3_G2.start();
+
+        Th1_Main.start();
+        Th2_Main.start();
+        ThA_Main.start();
+
+        // 🔹 Afișăm structura completă de grupuri și fire
+        System.out.println("\n=== Structura completă a firelor și grupurilor ===");
+        mainGroup.list();
+    }
+}
+
+// 🔸 Clasa Fir – fiecare thread afișează numele, grupul și prioritatea
+class Fir extends Thread {
+
+    public Fir(String name, ThreadGroup group, int priority) {
+        super(group, name);
+        setPriority(priority);
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Firul: " + getName() +
+                " | Grup: " + getThreadGroup().getName() +
+                " | Prioritate: " + getPriority());
         try {
-            fir1.start();
-            fir2.start();
-            fir3.start();
-            fir4.start();
-
-
-            fir1.join();
-            fir2.join();
-            fir3.join();
-            fir4.join();
-
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
-
-
-
-
-
-/// ///////------/////
-       
-
-        String studenti = "Rusanovschi Vladimir și Veceslav Covalciuc grupa Cr232 Programarea concurentă și distribuită ";
-        for (int i = 0; i < studenti.length(); i++) {
-            System.out.print(studenti.charAt(i));
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println();
     }
 }
-
-//------------------- TH1 -------------------
-class Th1 implements Runnable {
-    int[] mas;
-    public Th1(int[] mas) { this.mas = mas; }
-
-
-    public void run() {
-        System.out.println(Thread.currentThread().getName() + " -> Condiția 1: început, poziții pare ");
-        int suma = 0;
-        for (int i = 0; i < mas.length - 2; i += 2) {
-            int produs = mas[i] * mas[i + 2];
-            System.out.println("firul nr1"+"[" + i + "," + (i + 2) + "] " + mas[i] + " * " + mas[i + 2] + " = " + produs);
-            suma += produs;
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("firul nr1"+"→ Suma totală (de la început) = " + suma + "\n");
-    }
-}
-
-//------------------- TH2 -------------------
-class Th2 implements Runnable {
-    int[] mas;
-    public Th2(int[] mas) { this.mas = mas; }
-
-
-    public void run() {
-        System.out.println(Thread.currentThread().getName() + " -> Condiția 2: sfârșit, poziții pare ");
-        int suma = 0;
-        for (int i = mas.length - 2; i >= 2; i -= 2) {
-            int produs = mas[i] * mas[i - 2];
-            System.out.println("firul nr2"+"[" + i + "," + (i - 2) + "] " + mas[i] + " * " + mas[i - 2] + " = " + produs);
-            suma += produs;
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println( "  firul nr2"+"→ Suma totală (de la sfârșit) = " + suma + "\n");
-    }
-}
-
-//------------------- TH3 -------------------
-class Th3 implements Runnable {
-    int[] mas;
-    public Th3(int[] mas) { this.mas = mas; }
-
-
-    public void run() {
-        System.out.println(Thread.currentThread().getName() + " -> Condiția 1: început, poziții pare ");
-        int i = 0;
-        int suma = 0;
-        while (i < mas.length - 2) {
-            int produs = mas[i] * mas[i + 2];
-            System.out.println("firul nr3"+"[" + i + "," + (i + 2) + "] " + mas[i] + " * " + mas[i + 2] + " = " + produs);
-
-            suma += produs;
-            i += 2;
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("────────────────────────────────────────────");
-        System.out.println("firul nr3"+"★ Rezultatul final (începând de la început): " + suma + "\n");
-    }
-}
-
-//------------------- TH4 -------------------
-class Th4 implements Runnable {
-    int[] mas;
-    public Th4(int[] mas) { this.mas = mas; }
-
-
-    public void run() {
-        System.out.println(Thread.currentThread().getName() + " -> Condiția 2: sfârșit, poziții pare ");
-        int suma = 0;
-
-
-
-        for (int i = mas.length - 2; i >= 2; i -= 2) {
-            int produs = mas[i] * mas[i - 2];
-            System.out.println("firul nr4"+"[" + i + "," + (i - 2) + "] " + mas[i] + " * " + mas[i - 2] + " = " + produs);
-            suma += produs;
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        System.out.println("firul nr 4"+"→ Suma totală (de la sfârșit, tabel) = " + suma + "\n");
-
-    }
-}
-
