@@ -37,7 +37,7 @@ public class Main {
         System.out.println("\n=== Program finalizat ===");
     }
 }
-
+//Privet
 //────────────────────────────────────────────
 // FIR 1 – interval 567 → 1002 (de la început)
 //────────────────────────────────────────────
