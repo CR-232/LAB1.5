@@ -52,7 +52,7 @@ class Th1 extends Thread {
         System.out.println(getName() + " START (567–1002, început)");
 
         for (int i = 567; i < 1002; i += 2) {
-            System.out.println(getName() + " Produs: " + m[i] + "*" + m[i+1] + "=" + (m[i]*m[i+1]));
+            System.out.println(getName() + " FIR: " + m[i] + "*" + m[i+1] + "=" + (m[i]*m[i+1]));
             Thread.yield(); // metoda 2 de sincronizare
         }
 
@@ -87,7 +87,7 @@ class Th2 extends Thread {
         System.out.println(getName() + " START (1002–567, sfârșit)");
 
         for (int i = 1002; i > 567; i -= 2) {
-            System.out.println(getName() + " Produs: " + m[i] + "*" + m[i-1] + "=" + (m[i]*m[i-1]));
+            System.out.println(getName() + " FIR: " + m[i] + "*" + m[i-1] + "=" + (m[i]*m[i-1]));
         }
 
         System.out.println(getName() + " DONE\n");
@@ -116,7 +116,7 @@ class Th3 extends Thread {
         System.out.println(getName() + " START (567–1100, început)");
 
         for (int i = 567; i < 1100; i += 2) {
-            System.out.println(getName() + " Produs: " + m[i] + "*" + m[i+1] + "=" + (m[i]*m[i+1]));
+            System.out.println(getName() + " FIR: " + m[i] + "*" + m[i+1] + "=" + (m[i]*m[i+1]));
         }
 
         System.out.println(getName() + " DONE\n");
@@ -153,7 +153,7 @@ class Th4 extends Thread {
         System.out.println(getName() + " START (1100–567, sfârșit)");
 
         for (int i = 1100; i > 567; i -= 2) {
-            System.out.println(getName() + " Produs: " + m[i] + "*" +m[i-1] + "=" + (m[i]*m[i-1]));
+            System.out.println(getName() + " FIR: " + m[i] + "*" +m[i-1] + "=" + (m[i]*m[i-1]));
         }
 
         System.out.println(getName() + " DONE\n");
