@@ -43,7 +43,7 @@ class Th1 extends Thread {
 
     Th1(int[] a) { m = a; }
 
-    @Override
+
     public void run() {
 
         System.out.println(getName() + " START (567–1002, început)");
@@ -78,7 +78,7 @@ class Th2 extends Thread {
 
     Th2(int[] a) { m = a; }
 
-    @Override
+
     public void run() {
 
         System.out.println(getName() + " START (1002–567, sfârșit)");
@@ -107,7 +107,7 @@ class Th3 extends Thread {
 
     Th3(int[] a) { m = a; }
 
-    @Override
+
     public void run() {
 
         System.out.println(getName() + " START (567–1100, început)");
@@ -144,7 +144,7 @@ class Th4 extends Thread {
 
     Th4(int[] a) { m = a; }
 
-    @Override
+
     public void run() {
 
         System.out.println(getName() + " START (1100–567, sfârșit)");
