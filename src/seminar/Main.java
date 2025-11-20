@@ -50,12 +50,12 @@ class Th1 extends Thread {
 
         for (int i = 567; i < 1002; i += 2) {
             System.out.println(getName() + " FIR: " + m[i] + "*" + m[i+1] + "=" + (m[i]*m[i+1]));
-            Thread.yield(); // metoda 2 de sincronizare
+            Thread.yield();
         }
 
         System.out.println(getName() + " DONE\n");
 
-        // Așteaptă Th4 (mesajul 2)
+
         try {
             while (Main.t4.isAlive()) {
                 Thread.sleep(50);
