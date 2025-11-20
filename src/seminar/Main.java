@@ -9,12 +9,10 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
 
         int[] mas = new int[1101];
-        Random r = new Random();
-
-        System.out.println("Generare masiv...");
         for (int i = 0; i < mas.length; i++) {
-            mas[i] = r.nextInt(2000) + 100;
+            mas[i] = (int)(Math.random() * 2000) + 100;
         }
+
 
         System.out.println("Start fire...\n");
 
@@ -37,10 +35,9 @@ public class Main {
         System.out.println("\n=== Program finalizat ===");
     }
 }
-//Privet
-//────────────────────────────────────────────
+
 // FIR 1 – interval 567 → 1002 (de la început)
-//────────────────────────────────────────────
+
 class Th1 extends Thread {
     int[] m;
 
@@ -73,9 +70,9 @@ class Th1 extends Thread {
     }
 }
 
-//────────────────────────────────────────────
+
 // FIR 2 – interval 1002 → 567 (de la sfârșit)
-//────────────────────────────────────────────
+
 class Th2 extends Thread {
     int[] m;
 
@@ -102,9 +99,9 @@ class Th2 extends Thread {
         } catch (Exception ignored) {}
     }
 }
-//────────────────────────────────────────────
+
 // FIR 3 – 567 → 1100 (de la început)
-//────────────────────────────────────────────
+
 class Th3 extends Thread {
     int[] m;
 
@@ -121,7 +118,7 @@ class Th3 extends Thread {
 
         System.out.println(getName() + " DONE\n");
 
-        // Th3 afișează ultimul mesaj
+
         try {
             while (Main.t1.isAlive()) {
                 Thread.sleep(50);
