@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Main {
 
-    public static Thread t1, t2,t3,t4;
+    public static Thread t1,t2,t3,t4;
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -136,9 +136,9 @@ class Th3 extends Thread {
     }
 }
 
-//────────────────────────────────────────────
+
 // FIR 4 – interval 1100 → 567 (de la sfârșit)
-//────────────────────────────────────────────
+
 class Th4 extends Thread {
     int[] m;
 
