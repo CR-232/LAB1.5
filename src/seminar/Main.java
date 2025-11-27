@@ -88,7 +88,11 @@ class Th2 extends Thread {
         }
 
         System.out.println(getName() + " DONE\n");
-
+        try {
+            Thread.sleep(40);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         try {
             // PRIMUL mesaj final – se execută fără așteptări
             String t = "Th2 -> Nume student: Rusanovschi, Covalciuc\n";
