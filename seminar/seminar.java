@@ -24,7 +24,7 @@ public class seminar {
         for (int i = 0; i < X; i++) {
             producatori[i] = new Producer(store);
             producatori[i].setName("Producator #" + (i + 1));
-            producatori[i].setDaemon(true);   // producătorii merg continuu
+            producatori[i].setDaemon(true);
         }
 
         // Creăm consumatorii
@@ -46,7 +46,7 @@ public class seminar {
 }
 
 
-// -------------------- Depozitul (resursa partajată) --------------------
+// -------------------- Depozitul --------------------
 class Store {
 
     private final int capacity;      // capacitatea D = 12
@@ -115,7 +115,7 @@ class Producer extends Thread {
         this.store = store;
     }
 
-    @Override
+
     public void run() {
         while (true) {
             int a = pare[(int)(Math.random() * pare.length)];
@@ -139,7 +139,7 @@ class Consumer extends Thread {
         this.need = need;
     }
 
-    @Override
+
     public void run() {
         int count = 0;
 
