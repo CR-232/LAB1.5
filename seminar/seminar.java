@@ -123,26 +123,3 @@ class Producer extends Thread {
 
 
 // -------------------- Consumator --------------------
-class Consumer extends Thread {
-
-    Store store;
-    int need;
-
-    public Consumer(Store store, int need) {
-        this.store = store;
-        this.need = need;
-    }
-
-
-    public void run() {
-        int count = 0;
-
-        while (count < need) {
-            store.get(getName());
-            count++;
-
-            try { Thread.sleep(500); } catch (InterruptedException e) {}
-        }
-        System.out.println(getName() + " a consumat " + need + " obiecte și a finalizat.");
-    }
-}
