@@ -40,10 +40,10 @@ public class seminar {
 }
 
 
-// -------------------- Depozitul (resursa partajată) --------------------
+// -------------------- Depozitul  --------------------
 class Store {
 
-    private final int capacity;      // capacitatea D = 12
+    private final int capacity;
     private final ArrayList<Integer> buffer = new ArrayList<>();
 
     public Store(int capacity) {
@@ -109,7 +109,7 @@ class Producer extends Thread {
         this.store = store;
     }
 
-    @Override
+
     public void run() {
         while (true) {
             int a = pare[(int)(Math.random() * pare.length)];
@@ -133,7 +133,7 @@ class Consumer extends Thread {
         this.need = need;
     }
 
-    @Override
+
     public void run() {
         int count = 0;
 
