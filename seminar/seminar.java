@@ -1,156 +1,154 @@
 package seminar;
 
+import java.util.ArrayList;
+
 public class seminar {
-    public static void main(String[] args) {
-        int[] mas = new int[100];
+    public static void main(String[] args) throws InterruptedException {
 
-        System.out.println("Tabloul de numere generate aleatoriu:");
-        for (int i = 0; i < mas.length; i++) {
-            mas[i] = (int)(Math.random() * 100 ) + 1;
-            System.out.print(mas[i] + " ");
-        }
-        System.out.println("\n-------------------------------------\n");
-        Thread fir1 = new Thread(new Th1(mas), "Fir-1");
-        Thread fir2 = new Thread(new Th2(mas), "Fir-2");
-        Thread fir3 = new Thread(new Th3(mas), "Fir-3");
-        Thread fir4 = new Thread(new Th4(mas), "Fir-4");
-        try {
-            fir1.start();
-            fir2.start();
-            fir3.start();
-            fir4.start();
+        // X = 2 producători
+        int X = 2;
 
+        // Y = 5 consumatori
+        int Y = 5;
 
-            fir1.join();
-            fir2.join();
-            fir3.join();
-            fir4.join();
+        // Z = 4 obiecte consumate de fiecare consumator
+        int Z = 3;
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        // D = 12 capacitatea depozitului
+        int D = 12;
+
+        Store store = new Store(D);
+
+        // Creăm producătorii
+        Producer[] producatori = new Producer[X];
+        for (int i = 0; i < X; i++) {
+            producatori[i] = new Producer(store);
+            producatori[i].setName("Producator #" + (i + 1));
+            producatori[i].setDaemon(true);   // producătorii merg continuu
         }
 
-
-
-
-
-
-
-/// ///////------/////
-       
-
-        String studenti = "Rusanovschi Vladimir și Veceslav Covalciuc grupa Cr232 Programarea concurentă și distribuită ";
-        for (int i = 0; i < studenti.length(); i++) {
-            System.out.print(studenti.charAt(i));
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        // Creăm consumatorii
+        Consumer[] consumatori = new Consumer[Y];
+        for (int i = 0; i < Y; i++) {
+            consumatori[i] = new Consumer(store, Z);
+            consumatori[i].setName("Consumator #" + (i + 1));
         }
-        System.out.println();
+
+        // Start fire
+        for (Producer p : producatori) p.start();
+        for (Consumer c : consumatori) c.start();
+
+        // Așteptăm consumatorii
+        for (Consumer c : consumatori) c.join();
+
+        System.out.println("\n=== Toți consumatorii au fost îndestulați! ===");
     }
 }
 
-//------------------- TH1 -------------------
-class Th1 implements Runnable {
-    int[] mas;
-    public Th1(int[] mas) { this.mas = mas; }
+
+// -------------------- Depozitul (resursa partajată) --------------------
+class Store {
+
+    private final int capacity;      // capacitatea D = 12
+    private final ArrayList<Integer> buffer = new ArrayList<>();
+
+    public Store(int capacity) {
+        this.capacity = capacity;
+    }
+
+    // -------------------- PRODUCĂTOR --------------------
+    public synchronized void put(String nume, int a, int b) {
+
+        while (buffer.size() >= capacity) {
+            System.out.println(">>> Depozitul este PLIN. " + nume + " așteaptă...");
+            try { wait(); } catch (InterruptedException e) {}
+        }
+
+        System.out.println(nume + " a produs: " + a + ", " + b);
+
+        buffer.add(a);
+        buffer.add(b);
+
+        afiseazaDepozit();
+        notifyAll();
+    }
+
+    // -------------------- CONSUMATOR --------------------
+    public synchronized int get(String nume) {
+
+        while (buffer.isEmpty()) {
+            System.out.println(">>> Depozitul este GOL. " + nume + " așteaptă...");
+            try { wait(); } catch (InterruptedException e) {}
+        }
+
+        int val = buffer.remove(buffer.size() - 1);
+        System.out.println(nume + " a consumat: " + val);
+
+        afiseazaDepozit();
+        notifyAll();
+        return val;
+    }
+
+    // -------------------- Afișarea stării depozitului --------------------
+    private void afiseazaDepozit() {
+        if (buffer.isEmpty()) {
+            System.out.println("Depozitul este GOL.\n");
+            return;
+        }
+
+        System.out.print("Depozit (" + buffer.size() + "): ");
+        for (int x : buffer) System.out.print(x + " ");
+        System.out.println("\n");
+    }
+}
 
 
+// -------------------- Producător --------------------
+class Producer extends Thread {
+
+    Store store;
+
+    // Numere pare pentru VARIANTA 5
+    int[] pare = {2,4,6,8,10,12,14,16,18,20};
+
+    public Producer(Store store) {
+        this.store = store;
+    }
+
+    @Override
     public void run() {
-        System.out.println(Thread.currentThread().getName() + " -> Condiția 1: început, poziții pare ");
-        int suma = 0;
-        for (int i = 0; i < mas.length - 2; i += 2) {
-            int produs = mas[i] * mas[i + 2];
-            System.out.println("firul nr1"+"[" + i + "," + (i + 2) + "] " + mas[i] + " * " + mas[i + 2] + " = " + produs);
-            suma += produs;
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        while (true) {
+            int a = pare[(int)(Math.random() * pare.length)];
+            int b = pare[(int)(Math.random() * pare.length)];
+            store.put(getName(), a, b);
+
+            try { Thread.sleep(300); } catch (InterruptedException e) {}
         }
-        System.out.println("firul nr1"+"→ Suma totală (de la început) = " + suma + "\n");
     }
 }
 
-//------------------- TH2 -------------------
-class Th2 implements Runnable {
-    int[] mas;
-    public Th2(int[] mas) { this.mas = mas; }
 
+// -------------------- Consumator --------------------
+class Consumer extends Thread {
 
+    Store store;
+    int need;   // Z = câte obiecte trebuie să consume
+
+    public Consumer(Store store, int need) {
+        this.store = store;
+        this.need = need;
+    }
+
+    @Override
     public void run() {
-        System.out.println(Thread.currentThread().getName() + " -> Condiția 2: sfârșit, poziții pare ");
-        int suma = 0;
-        for (int i = mas.length - 2; i >= 2; i -= 2) {
-            int produs = mas[i] * mas[i - 2];
-            System.out.println("firul nr2"+"[" + i + "," + (i - 2) + "] " + mas[i] + " * " + mas[i - 2] + " = " + produs);
-            suma += produs;
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        int count = 0;
+
+        while (count < need) {
+            store.get(getName());
+            count++;
+
+            try { Thread.sleep(500); } catch (InterruptedException e) {}
         }
-        System.out.println( "  firul nr2"+"→ Suma totală (de la sfârșit) = " + suma + "\n");
+        System.out.println(getName() + " a consumat " + need + " obiecte și a finalizat.");
     }
 }
-
-//------------------- TH3 -------------------
-class Th3 implements Runnable {
-    int[] mas;
-    public Th3(int[] mas) { this.mas = mas; }
-
-
-    public void run() {
-        System.out.println(Thread.currentThread().getName() + " -> Condiția 1: început, poziții pare ");
-        int i = 0;
-        int suma = 0;
-        while (i < mas.length - 2) {
-            int produs = mas[i] * mas[i + 2];
-            System.out.println("firul nr3"+"[" + i + "," + (i + 2) + "] " + mas[i] + " * " + mas[i + 2] + " = " + produs);
-
-            suma += produs;
-            i += 2;
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("────────────────────────────────────────────");
-        System.out.println("firul nr3"+"★ Rezultatul final (începând de la început): " + suma + "\n");
-    }
-}
-
-//------------------- TH4 -------------------
-class Th4 implements Runnable {
-    int[] mas;
-    public Th4(int[] mas) { this.mas = mas; }
-
-
-    public void run() {
-        System.out.println(Thread.currentThread().getName() + " -> Condiția 2: sfârșit, poziții pare ");
-        int suma = 0;
-
-
-
-        for (int i = mas.length - 2; i >= 2; i -= 2) {
-            int produs = mas[i] * mas[i - 2];
-            System.out.println("firul nr4"+"[" + i + "," + (i - 2) + "] " + mas[i] + " * " + mas[i - 2] + " = " + produs);
-            suma += produs;
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        System.out.println("firul nr 4"+"→ Suma totală (de la sfârșit, tabel) = " + suma + "\n");
-
-    }
-}
-
