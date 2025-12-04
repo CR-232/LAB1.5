@@ -21,7 +21,11 @@ public class seminar {
             producatori[i].setDaemon(true);
         }
 
-
+        Consumer[] consumatori = new Consumer[Y];
+        for (int i = 0; i < Y; i++) {
+            consumatori[i] = new Consumer(store, Z);
+            consumatori[i].setName("Consumator #" + (i + 1));
+        }
 
 
 
