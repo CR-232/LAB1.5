@@ -109,7 +109,7 @@ class Producer extends Thread {
         this.store = store;
     }
 
-
+///////////
     public void run() {
         while (true) {
             int a = pare[(int)(Math.random() * pare.length)];
