@@ -22,11 +22,7 @@ public class seminar {
         }
 
 
-        Consumer[] consumatori = new Consumer[Y];
-        for (int i = 0; i < Y; i++) {
-            consumatori[i] = new Consumer(store, Z);
-            consumatori[i].setName("Consumator #" + (i + 1));
-        }
+
 
 
         for (Producer p : producatori) p.start();
