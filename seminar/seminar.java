@@ -19,7 +19,7 @@ public class seminar {
 
         Store store = new Store(D);
 
-        // Creăm producătorii
+
         Producer[] producatori = new Producer[X];
         for (int i = 0; i < X; i++) {
             producatori[i] = new Producer(store);
@@ -27,18 +27,18 @@ public class seminar {
             producatori[i].setDaemon(true);
         }
 
-        // Creăm consumatorii
+
         Consumer[] consumatori = new Consumer[Y];
         for (int i = 0; i < Y; i++) {
             consumatori[i] = new Consumer(store, Z);
             consumatori[i].setName("Consumator #" + (i + 1));
         }
 
-        // Start fire
+
         for (Producer p : producatori) p.start();
         for (Consumer c : consumatori) c.start();
 
-        // Așteptăm consumatorii
+
         for (Consumer c : consumatori) c.join();
 
         System.out.println("\n=== Toți consumatorii au fost îndestulați! ===");
@@ -108,7 +108,7 @@ class Producer extends Thread {
 
     Store store;
 
-    // Numere pare pentru VARIANTA 5
+
     int[] pare = {2,4,6,8,10,12,14,16,18,20};
 
     public Producer(Store store) {
@@ -132,7 +132,7 @@ class Producer extends Thread {
 class Consumer extends Thread {
 
     Store store;
-    int need;   // Z = câte obiecte trebuie să consume
+    int need;
 
     public Consumer(Store store, int need) {
         this.store = store;
