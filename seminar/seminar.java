@@ -5,21 +5,15 @@ import java.util.ArrayList;
 public class seminar {
     public static void main(String[] args) throws InterruptedException {
 
-        // X = 2 producători
+
         int X = 2;
-
-        // Y = 5 consumatori
         int Y = 5;
-
-        // Z = 4 obiecte consumate de fiecare consumator
         int Z = 3;
-
-        // D = 12 capacitatea depozitului
         int D = 12;
 
         Store store = new Store(D);
 
-        // Creăm producătorii
+
         Producer[] producatori = new Producer[X];
         for (int i = 0; i < X; i++) {
             producatori[i] = new Producer(store);
@@ -27,18 +21,18 @@ public class seminar {
             producatori[i].setDaemon(true);
         }
 
-        // Creăm consumatorii
+
         Consumer[] consumatori = new Consumer[Y];
         for (int i = 0; i < Y; i++) {
             consumatori[i] = new Consumer(store, Z);
             consumatori[i].setName("Consumator #" + (i + 1));
         }
 
-        // Start fire
+
         for (Producer p : producatori) p.start();
         for (Consumer c : consumatori) c.start();
 
-        // Așteptăm consumatorii
+
         for (Consumer c : consumatori) c.join();
 
         System.out.println("\n=== Toți consumatorii au fost îndestulați! ===");
@@ -46,7 +40,7 @@ public class seminar {
 }
 
 
-// -------------------- Depozitul --------------------
+// -------------------- Depozitul (resursa partajată) --------------------
 class Store {
 
     private final int capacity;      // capacitatea D = 12
@@ -108,14 +102,14 @@ class Producer extends Thread {
 
     Store store;
 
-    // Numere pare pentru VARIANTA 5
+
     int[] pare = {2,4,6,8,10,12,14,16,18,20};
 
     public Producer(Store store) {
         this.store = store;
     }
 
-
+    @Override
     public void run() {
         while (true) {
             int a = pare[(int)(Math.random() * pare.length)];
@@ -132,14 +126,14 @@ class Producer extends Thread {
 class Consumer extends Thread {
 
     Store store;
-    int need;   // Z = câte obiecte trebuie să consume
+    int need;
 
     public Consumer(Store store, int need) {
         this.store = store;
         this.need = need;
     }
 
-
+    @Override
     public void run() {
         int count = 0;
 
