@@ -68,7 +68,20 @@ class Store {
     }
 
     // -------------------- CONSUMATOR --------------------
+    public synchronized int get(String nume) {
 
+        while (buffer.isEmpty()) {
+            System.out.println(">>> Depozitul este GOL. " + nume + " așteaptă...");
+            try { wait(); } catch (InterruptedException e) {}
+        }
+
+        int val = buffer.remove(buffer.size() - 1);
+        System.out.println(nume + " a consumat: " + val);
+
+        afiseazaDepozit();
+        notifyAll();
+        return val;
+    }
 
     // -------------------- Afișarea stării depozitului --------------------
     private void afiseazaDepozit() {
