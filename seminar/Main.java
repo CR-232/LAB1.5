@@ -33,7 +33,7 @@ public class Main {
         consumerPool.shutdown();
 
         // Producătorii lucrează continuu (nu îi oprim)
-        // producerPool.shutdown();  // dacă vrei să îi oprești, decomentează
+        producerPool.shutdown();
     }
 }
 
