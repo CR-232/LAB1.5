@@ -16,7 +16,7 @@ public class Main {
 
 
         ExecutorService executor = Executors.newFixedThreadPool(X + Y);
-
+//
 
         for (int i = 0; i < X; i++) {
             executor.execute(new Producer("Producator #" + (i + 1), store));
