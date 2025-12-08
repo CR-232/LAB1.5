@@ -7,32 +7,39 @@ import java.util.concurrent.Executors;
 public class Main {
     public static void main(String[] args) {
 
-        int X = 2;   
-        int Y = 5;
-        int Z = 3;
-        int D = 12;
+        final int X = 2;
+        final int Y = 5;
+        final int Z = 3;
+        final int D = 12;
 
         Store store = new Store(D);
 
+        // ================== POOL-URI ==================
+        ExecutorService producerPool = Executors.newFixedThreadPool(X);
+        ExecutorService consumerPool = Executors.newFixedThreadPool(Y);
+        // =================================================
 
-        ExecutorService executor = Executors.newFixedThreadPool(X + Y);
-//
-
+        // PORNIRE PRODUCĂTORI
         for (int i = 0; i < X; i++) {
-            executor.execute(new Producer("Producator #" + (i + 1), store));
+            producerPool.execute(new Producer("Producator #" + (i + 1), store));
         }
 
-
+        // PORNIRE CONSUMATORI
         for (int i = 0; i < Y; i++) {
-            executor.execute(new Consumer("Consumator #" + (i + 1), store, Z));
+            consumerPool.execute(new Consumer("Consumator #" + (i + 1), store, Z));
         }
 
+        // Consumatorii se pot opri
+        consumerPool.shutdown();
 
-        executor.shutdown();
+        // Producătorii lucrează continuu (nu îi oprim)
+        // producerPool.shutdown();  // dacă vrei să îi oprești, decomentează
     }
 }
 
-// ======================= DEPOZIT =======================
+// ================================================================
+//                        DEPOZIT
+// ================================================================
 class Store {
 
     private final int capacity;
@@ -79,7 +86,7 @@ class Store {
         return val;
     }
 
-    // -------------------- Stare depozit --------------------
+    // Afisare stare depozit
     private void afiseazaDepozit() {
         if (buffer.isEmpty()) {
             System.out.println("Depozitul este GOL.\n");
@@ -93,13 +100,14 @@ class Store {
 }
 
 
-// ======================= PRODUCĂTOR =======================
+// ================================================================
+//                        PRODUCĂTOR
+// ================================================================
 class Producer implements Runnable {
 
     private final Store store;
     private final String nume;
-
-    int[] pare = {2,4,6,8,10,12,14,16,18,20};
+    private final int[] pare = {2,4,6,8,10,12,14,16,18,20};
 
     public Producer(String nume, Store store) {
         this.nume = nume;
@@ -118,7 +126,9 @@ class Producer implements Runnable {
 }
 
 
-// ======================= CONSUMATOR =======================
+// ================================================================
+//                        CONSUMATOR
+// ================================================================
 class Consumer implements Runnable {
 
     private final Store store;
@@ -143,6 +153,7 @@ class Consumer implements Runnable {
 
         System.out.println(nume + " a consumat " + need + " obiecte și a finalizat.");
 
+        // ultimul consumator anunță finalizarea
         if (nume.equals("Consumator #5")) {
             System.out.println("\n=== Toți consumatorii au fost îndestulați! ===");
         }
