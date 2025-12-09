@@ -91,7 +91,7 @@ class Store {
         System.out.println("\n");
     }
 }
-//dec i cum cum este legat runul producatorilor de firele de executie din pool creat
+
 
 // ======================= PRODUCĂTOR =======================
 class Producer implements Runnable {
