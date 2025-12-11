@@ -5,159 +5,160 @@ import java.util.Deque;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-// ======================= DEPOZIT ===========================
-class Depot {
-
-    private final int CAPACITY = 12;   // D = 12
-    private final int TARGET = 60;     // Z = 60
-
-    private final Deque<Integer> buffer = new ArrayDeque<>(CAPACITY);
-
-    private final ReentrantLock lock = new ReentrantLock(true);
-    private final Condition notFull = lock.newCondition();
-    private final Condition notEmpty = lock.newCondition();
-
-    private int producedTotal = 0;
-    private int consumedTotal = 0;
-
-    private int nextEven = 2; // numere pare (2,4,6,...)
-
-    public boolean isDone() {
-        return consumedTotal >= TARGET;
-    }
-
-    // ============= PRODUCE =================
-    public void produce(String name) throws InterruptedException {
-        lock.lock();
-        try {
-            // dacă depozitul e plin → producătorul așteaptă
-            while (buffer.size() == CAPACITY) {
-                System.out.println(">>> Depozitul este PLIN. Producătorii așteaptă...");
-                notFull.await();
-            }
-
-            if (producedTotal >= TARGET) return;
-
-            int value = nextEven;
-            nextEven += 2; // următorul număr par
-
-            buffer.addLast(value);
-            producedTotal++;
-
-            System.out.printf("%s a produs %d | stoc=%d/%d | totalProd=%d%n",
-                    name, value, buffer.size(), CAPACITY, producedTotal);
-
-            // Dacă depozitul s-a umplut, consumatorii pot începe
-            if (buffer.size() == CAPACITY) {
-                System.out.println(">>> Depozitul este PLIN (12/12). Consumatorii pot începe.");
-                notEmpty.signalAll();
-            }
-
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    // ============= CONSUMĂ =================
-    public void consume(String name) throws InterruptedException {
-        lock.lock();
-        try {
-
-            while (buffer.isEmpty() || buffer.size() != CAPACITY && consumedTotal == 0) {
-                notEmpty.await();
-            }
-
-            while (buffer.isEmpty()) {
-                System.out.println("<<< Depozitul este GOL. Consumatorii așteaptă...");
-                notEmpty.await();
-            }
-
-            if (consumedTotal >= TARGET) return;
-
-            int value = buffer.removeFirst();
-            consumedTotal++;
-
-            System.out.printf("%s a consumat %d | stoc=%d/%d | totalCons=%d%n",
-                    name, value, buffer.size(), CAPACITY, consumedTotal);
-
-
-            if (buffer.isEmpty()) {
-                System.out.println("<<< Depozitul este GOL (0/12). Producătorii pot începe.");
-                notFull.signalAll();
-            }
-
-        } finally {
-            lock.unlock();
-        }
-    }
-}
-
-// ======================= PRODUCĂTOR =========================
-class Producer extends Thread {
-    private final Depot depot;
-
-    public Producer(Depot depot, String name) {
-        super(name);
-        this.depot = depot;
-    }
-
-
-    public void run() {
-        try {
-            while (!depot.isDone()) {
-                depot.produce(getName());
-                Thread.sleep(50); // simulare timp producție
-            }
-        } catch (InterruptedException ignored) {}
-    }
-}
-
-// ======================= CONSUMATOR =========================
-class Consumer extends Thread {
-    private final Depot depot;
-
-    public Consumer(Depot depot, String name) {
-        super(name);
-        this.depot = depot;
-    }
-
-
-    public void run() {
-        try {
-            while (!depot.isDone()) {
-                depot.consume(getName());
-                Thread.sleep(80); // simulare timp consum
-            }
-        } catch (InterruptedException ignored) {}
-    }
-}
-
-// ======================= MAIN ===============================
 public class Varianta5 {
+
+    // ---------------- VARIANTA TA ----------------
+    static final int X = 2;   // producători
+    static final int Y = 5;   // consumatori
+    static final int Z = 60;  // număr total obiecte
+    static final int D = 12;  // dimensiune depozit
+    // -------------------------------------------------
+
+    static class Depozit {
+
+        private final Deque<Integer> buffer = new ArrayDeque<>(D);
+
+        private final ReentrantLock lock = new ReentrantLock(true);
+        private final Condition notFull = lock.newCondition();
+        private final Condition notEmpty = lock.newCondition();
+
+        private int totalProduse = 0;
+        private int totalConsumate = 0;
+        private boolean gata = false;
+
+        private int nextEven = 2; // numere pare: 2, 4, 6 ...
+
+        // ================= PRODUCĂTOR ====================
+        public void produce(String name) throws InterruptedException {
+            lock.lock();
+            try {
+                if (totalProduse >= Z) {
+                    gata = true;
+                    notEmpty.signalAll();
+                    return;
+                }
+
+                // producătorii așteaptă până depozitul este gol
+                while (!buffer.isEmpty()) {
+                    notFull.await();
+                }
+
+                // producătorii umplu depozitul complet
+                for (int i = 0; i < D; i++) {
+
+                    if (totalProduse >= Z) break;
+
+                    buffer.addLast(nextEven);
+                    System.out.println(name + " a produs: " + nextEven);
+
+                    nextEven += 2;
+                    totalProduse++;
+                }
+
+                System.out.println(">>> DEPOZITUL ESTE PLIN: " + buffer.size() + "/" + D);
+                notEmpty.signalAll(); // trezește consumatorii
+
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        // ================= CONSUMATOR ====================
+        public void consume(String name) throws InterruptedException {
+            lock.lock();
+            try {
+
+                while (buffer.size() < D && !gata) {
+                    notEmpty.await();
+                }
+
+                if (buffer.isEmpty() && gata) return;
+
+                // consumatorii golesc depozitul complet
+                while (!buffer.isEmpty()) {
+
+                    int val = buffer.removeFirst();
+                    System.out.println(name + " a consumat: " + val);
+
+                    totalConsumate++;
+
+                    if (totalConsumate >= Z) {
+                        gata = true;
+                        return;
+                    }
+                }
+
+                System.out.println("<<< DEPOZITUL ESTE GOL");
+                notFull.signalAll(); // trezește producătorii
+
+            } finally {
+                lock.unlock();
+            }
+        }
+    }
+
+    // ================= FIRELE PRODUCĂTOR ==================
+    static class Producator extends Thread {
+        private final Depozit depozit;
+
+        Producator(Depozit d, String name) {
+            super(name);
+            this.depozit = d;
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (!depozit.gata) {
+                    depozit.produce(getName());
+                    sleep(100);
+                }
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+    // ================= FIRELE CONSUMATOR ==================
+    static class Consumator extends Thread {
+        private final Depozit depozit;
+
+        Consumator(Depozit d, String name) {
+            super(name);
+            this.depozit = d;
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (!depozit.gata) {
+                    depozit.consume(getName());
+                    sleep(120);
+                }
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+    // ====================== MAIN ===========================
     public static void main(String[] args) throws InterruptedException {
 
-        Depot depot = new Depot();
+        Depozit depozit = new Depozit();
 
+        Thread[] producatori = new Thread[X];
+        Thread[] consumatori = new Thread[Y];
 
-        Producer[] producers = new Producer[2];
-        for (int i = 0; i < 2; i++) {
-            producers[i] = new Producer(depot, "Producator-" + (i + 1));
-        }
+        for (int i = 0; i < X; i++)
+            producatori[i] = new Producator(depozit, "Producator-" + (i + 1));
 
+        for (int i = 0; i < Y; i++)
+            consumatori[i] = new Consumator(depozit, "Consumator-" + (i + 1));
 
-        Consumer[] consumers = new Consumer[5];
-        for (int i = 0; i < 5; i++) {
-            consumers[i] = new Consumer(depot, "Consumator-" + (i + 1));
-        }
+        for (Thread p : producatori) p.start();
+        for (Thread c : consumatori) c.start();
 
+        for (Thread p : producatori) p.join();
+        for (Thread c : consumatori) c.join();
 
-        for (Producer p : producers) p.start();
-        for (Consumer c : consumers) c.start();
-
-
-        for (Producer p : producers) p.join();
-        for (Consumer c : consumers) c.join();
-
-        System.out.println("\n=== GATA! Au fost produse și consumate 60 de numere pare. ===");
+        System.out.println("\n=== FINALIZAT: 60 obiecte produse și consumate corect (VARIANTA 5) ===");
     }
 }
